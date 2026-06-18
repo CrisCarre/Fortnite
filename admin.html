@@ -1024,11 +1024,22 @@
       }
       // Si se pone pos.1 → fila 1 "A quién", pos.2 → fila 2 "A quién"
       if (field === 'estado' && (value === 'pos1' || value === 'pos2')) {
-        const seguidor = esp.usuario;
-        const targetId = value === 'pos1' ? 'f1_da_a' : 'f2_da_a';
-        const aQuienInput = document.getElementById(targetId);
-        if (aQuienInput) aQuienInput.value = seguidor;
-        // Solo rellena A quién, el espíritu lo pone tú manualmente
+        const fila = value === 'pos1' ? 'f1' : 'f2';
+        // Rellenar A quién de PRÉSTAMO
+        const daA = document.getElementById(fila + '_da_a');
+        if (daA) daA.value = esp.usuario;
+        // Rellenar SEGUIDOR de DEVUELVE
+        const devPart = document.getElementById(fila + '_dev_part');
+        if (devPart) devPart.value = esp.usuario;
+        // Autocompletar espíritu y rareza en PRÉSTAMO y DEVUELVE
+        const daEsp = document.getElementById(fila + '_da_esp');
+        const daRar = document.getElementById(fila + '_da_rar');
+        const devEsp = document.getElementById(fila + '_dev_esp');
+        const devRar = document.getElementById(fila + '_dev_rar');
+        if (daEsp) { daEsp.value = esp.espiritu || ''; colorInput(daEsp); }
+        if (daRar) { daRar.value = esp.rareza || ''; colorInput(daRar); }
+        if (devEsp) { devEsp.value = esp.espiritu || ''; colorInput(devEsp); }
+        if (devRar) { devRar.value = esp.rareza || ''; colorInput(devRar); }
       }
     }
     function addEspRow() {
