@@ -421,6 +421,111 @@
       padding: 0 2px;
     }
 
+    .ic-table {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: .5rem;
+      overflow-x: auto;
+    }
+
+    .ic-head {
+      display: grid;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr 20px 1fr 1fr 1fr;
+      gap: 6px;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .ic-row {
+      display: grid;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr 20px 1fr 1fr 1fr;
+      gap: 6px;
+      align-items: center;
+      background: rgba(0, 0, 0, .2);
+      border-radius: 8px;
+      padding: 6px 4px;
+      border: 1px solid rgba(255, 106, 0, .1);
+    }
+
+    .ic-row:hover {
+      border-color: rgba(255, 106, 0, .3);
+    }
+
+    .ic-num {
+      font-family: var(--bebas);
+      font-size: 16px;
+      color: var(--orange);
+      text-align: center;
+    }
+
+    .ic-arrow {
+      font-size: 16px;
+      color: var(--orange);
+      text-align: center;
+    }
+
+    .ic-sep {
+      text-align: center;
+    }
+
+    .ic-table {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ic-head {
+      display: grid;
+      grid-template-columns: 24px 1fr 1fr 1fr 24px 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 0 4px;
+    }
+
+    .ic-row {
+      display: grid;
+      grid-template-columns: 24px 1fr 1fr 1fr 24px 1fr 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+      background: rgba(0, 0, 0, .2);
+      border-radius: 8px;
+      padding: 8px 6px;
+      border: 1px solid rgba(255, 106, 0, .1);
+    }
+
+    .ic-row:first-child {
+      border-color: rgba(255, 215, 0, .2);
+    }
+
+    .ic-num {
+      font-family: var(--bebas);
+      font-size: 16px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .ic-arrow {
+      font-size: 18px;
+      color: var(--orange);
+      text-align: center;
+    }
+
+    @media(max-width:700px) {
+      .ic-head {
+        display: none;
+      }
+
+      .ic-row {
+        grid-template-columns: 20px 1fr 1fr;
+        grid-template-rows: auto auto;
+        row-gap: 6px;
+      }
+
+      .ic-arrow {
+        display: none;
+      }
+    }
+
     .intercambio-input {
       width: 100%;
       background: var(--bg);
@@ -578,93 +683,95 @@
           <!-- INTERCAMBIO -->
           <div class="card"
             style="margin-top:1.25rem;background:linear-gradient(135deg,#1a0800 0%,#2a1000 30%,#1a0500 60%,#0f0800 100%);border-color:rgba(255,106,0,.4);box-shadow:0 0 30px rgba(255,80,0,.15),inset 0 0 60px rgba(255,40,0,.05);">
-            <div class="card-title" style="color:#c87fff;border-bottom-color:rgba(180,100,255,.2)">🔄 Intercambio activo
+            <div class="card-title" style="color:#ff8c00;border-bottom-color:rgba(255,106,0,.3)">🔄 Intercambio activo
             </div>
 
-            <div class="intercambio-wrap">
-
-              <!-- ENVÍO -->
-              <div class="intercambio-side">
-                <div class="intercambio-label send-label">THE_CARRE envía</div>
-                <div class="intercambio-grid">
-                  <div class="intercambio-col-header">
-                    <div class="flabel">Espíritu</div>
-                  </div>
-                  <div class="intercambio-col-header">
-                    <div class="flabel">Rareza</div>
-                  </div>
-                  <div class="intercambio-col-header">
-                    <div class="flabel">Para quién</div>
-                  </div>
-                </div>
-                <div class="intercambio-grid" id="envio-rows">
-                  <select class="fselect" id="e_esp_0"></select>
-                  <select class="fselect" id="e_rar_0"></select>
-                  <select class="fselect" id="e_dst_0">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-
-                  <select class="fselect" id="e_esp_1"></select>
-                  <select class="fselect" id="e_rar_1"></select>
-                  <select class="fselect" id="e_dst_1">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-
-                  <select class="fselect" id="e_esp_2"></select>
-                  <select class="fselect" id="e_rar_2"></select>
-                  <select class="fselect" id="e_dst_2">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-
-                  <select class="fselect" id="e_esp_3"></select>
-                  <select class="fselect" id="e_rar_3"></select>
-                  <select class="fselect" id="e_dst_3">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-                </div>
+            <div class="ic-table">
+              <!-- CABECERA -->
+              <div class="ic-head">
+                <div class="flabel">#</div>
+                <div class="flabel">Participante</div>
+                <div class="flabel">Da espíritu</div>
+                <div class="flabel">Rareza</div>
+                <div class="flabel">→ A quién</div>
+                <div class="flabel ic-sep"></div>
+                <div class="flabel">← De quién</div>
+                <div class="flabel">Recibe espíritu</div>
+                <div class="flabel">Rareza</div>
               </div>
 
-              <div class="intercambio-arrow">⇅</div>
+              <!-- FILA 1: the_CARRE fijo -->
+              <div class="ic-row">
+                <div class="ic-num">1</div>
+                <input class="intercambio-input locked" value="the_CARRE" readonly>
+                <select class="fselect" id="f1_da_esp"></select>
+                <select class="fselect" id="f1_da_rar"></select>
+                <select class="fselect" id="f1_da_a">
+                  <option value="">—</option>
+                </select>
+                <div class="ic-arrow">⇄</div>
+                <select class="fselect" id="f1_rec_de">
+                  <option value="">—</option>
+                </select>
+                <select class="fselect" id="f1_rec_esp"></select>
+                <select class="fselect" id="f1_rec_rar"></select>
+              </div>
 
-              <!-- RETORNO -->
-              <div class="intercambio-side">
-                <div class="intercambio-label return-label">THE_CARRE recibe</div>
-                <div class="intercambio-grid">
-                  <div class="intercambio-col-header">
-                    <div class="flabel">De quién</div>
-                  </div>
-                  <div class="intercambio-col-header">
-                    <div class="flabel">Espíritu</div>
-                  </div>
-                  <div class="intercambio-col-header">
-                    <div class="flabel">Rareza</div>
-                  </div>
-                </div>
-                <div class="intercambio-grid" id="retorno-rows">
-                  <select class="fselect" id="r_org_0">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-                  <select class="fselect" id="r_esp_0"></select>
-                  <select class="fselect" id="r_rar_0"></select>
+              <!-- FILA 2 -->
+              <div class="ic-row">
+                <div class="ic-num">2</div>
+                <select class="fselect" id="f2_part">
+                  <option value="">— Seleccionar —</option>
+                </select>
+                <select class="fselect" id="f2_da_esp"></select>
+                <select class="fselect" id="f2_da_rar"></select>
+                <select class="fselect" id="f2_da_a">
+                  <option value="">—</option>
+                </select>
+                <div class="ic-arrow">⇄</div>
+                <select class="fselect" id="f2_rec_de">
+                  <option value="">—</option>
+                </select>
+                <select class="fselect" id="f2_rec_esp"></select>
+                <select class="fselect" id="f2_rec_rar"></select>
+              </div>
 
-                  <select class="fselect" id="r_org_1">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-                  <select class="fselect" id="r_esp_1"></select>
-                  <select class="fselect" id="r_rar_1"></select>
+              <!-- FILA 3 -->
+              <div class="ic-row">
+                <div class="ic-num">3</div>
+                <select class="fselect" id="f3_part">
+                  <option value="">— Seleccionar —</option>
+                </select>
+                <select class="fselect" id="f3_da_esp"></select>
+                <select class="fselect" id="f3_da_rar"></select>
+                <select class="fselect" id="f3_da_a">
+                  <option value="">—</option>
+                </select>
+                <div class="ic-arrow">⇄</div>
+                <select class="fselect" id="f3_rec_de">
+                  <option value="">—</option>
+                </select>
+                <select class="fselect" id="f3_rec_esp"></select>
+                <select class="fselect" id="f3_rec_rar"></select>
+              </div>
 
-                  <select class="fselect" id="r_org_2">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-                  <select class="fselect" id="r_esp_2"></select>
-                  <select class="fselect" id="r_rar_2"></select>
-
-                  <select class="fselect" id="r_org_3">
-                    <option value="">— Seleccionar —</option>
-                  </select>
-                  <select class="fselect" id="r_esp_3"></select>
-                  <select class="fselect" id="r_rar_3"></select>
-                </div>
+              <!-- FILA 4 -->
+              <div class="ic-row">
+                <div class="ic-num">4</div>
+                <select class="fselect" id="f4_part">
+                  <option value="">— Seleccionar —</option>
+                </select>
+                <select class="fselect" id="f4_da_esp"></select>
+                <select class="fselect" id="f4_da_rar"></select>
+                <select class="fselect" id="f4_da_a">
+                  <option value="">—</option>
+                </select>
+                <div class="ic-arrow">⇄</div>
+                <select class="fselect" id="f4_rec_de">
+                  <option value="">—</option>
+                </select>
+                <select class="fselect" id="f4_rec_esp"></select>
+                <select class="fselect" id="f4_rec_rar"></select>
               </div>
 
             </div>
@@ -802,6 +909,7 @@
       const { data } = await sb.from('espiritus').select('*').order('orden', { ascending: true }).order('created_at', { ascending: true });
       espiritus = data || [];
       renderEspTable();
+      poblarUsuariosIntercambio();
       poblarDestinoOrigen();
     }
 
@@ -895,25 +1003,29 @@
 
     // ══ INTERCAMBIO ══
     let intercambioId = null;
+    const FILAS = ['f1', 'f2', 'f3', 'f4'];
 
     function poblarSelectsIntercambio() {
-      const esp = ESPIRITUS_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
+      const esp = '<option value="">—</option>' + ESPIRITUS_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
       const rar = RAREZA_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
-      for (let i = 0; i < 4; i++) {
-        document.getElementById(`e_esp_${i}`).innerHTML = esp;
-        document.getElementById(`e_rar_${i}`).innerHTML = rar;
-        document.getElementById(`r_esp_${i}`).innerHTML = esp;
-        document.getElementById(`r_rar_${i}`).innerHTML = rar;
-      }
+      FILAS.forEach(f => {
+        document.getElementById(`${f}_da_esp`).innerHTML = esp;
+        document.getElementById(`${f}_da_rar`).innerHTML = rar;
+        document.getElementById(`${f}_rec_esp`).innerHTML = esp;
+        document.getElementById(`${f}_rec_rar`).innerHTML = rar;
+      });
     }
 
-    function poblarDestinoOrigen() {
-      const opts = '<option value="">— Seleccionar —</option>' +
+    function poblarUsuariosIntercambio() {
+      const opts = '<option value="">—</option>' +
         espiritus.map(e => `<option value="${e.usuario}">${e.usuario}${e.alias ? ' (' + e.alias + ')' : ''}</option>`).join('');
-      for (let i = 0; i < 4; i++) {
-        document.getElementById(`e_dst_${i}`).innerHTML = opts;
-        document.getElementById(`r_org_${i}`).innerHTML = opts;
-      }
+      // participantes filas 2-4
+      ['f2_part', 'f3_part', 'f4_part'].forEach(id => document.getElementById(id).innerHTML = opts);
+      // "a quién" y "de quién" todas las filas
+      FILAS.forEach(f => {
+        document.getElementById(`${f}_da_a`).innerHTML = '<option value="">—</option>' + espiritus.map(e => `<option value="${e.usuario}">${e.usuario}</option>`).join('');
+        document.getElementById(`${f}_rec_de`).innerHTML = '<option value="">—</option>' + espiritus.map(e => `<option value="${e.usuario}">${e.usuario}</option>`).join('');
+      });
     }
 
     async function loadIntercambio() {
@@ -922,34 +1034,32 @@
       if (!data) { document.getElementById('intercambio-status').textContent = 'Sin intercambio activo'; return; }
       intercambioId = data.id;
       setTimeout(() => {
-        for (let i = 0; i < 4; i++) {
-          const ei = data[`envio_espiritu_${i}`];
-          const er = data[`envio_rareza_${i}`];
-          const ed = data[`envio_destino_${i}`];
-          const ro = data[`retorno_origen_${i}`];
-          const re = data[`retorno_espiritu_${i}`];
-          const rr = data[`retorno_rareza_${i}`];
-          if (ei) document.getElementById(`e_esp_${i}`).value = ei;
-          if (er) document.getElementById(`e_rar_${i}`).value = er;
-          if (ed) document.getElementById(`e_dst_${i}`).value = ed;
-          if (ro) document.getElementById(`r_org_${i}`).value = ro;
-          if (re) document.getElementById(`r_esp_${i}`).value = re;
-          if (rr) document.getElementById(`r_rar_${i}`).value = rr;
-        }
+        FILAS.forEach(f => {
+          const set = (id, val) => { if (val && document.getElementById(id)) document.getElementById(id).value = val; };
+          if (f !== 'f1') set(`${f}_part`, data[`${f}_participante`]);
+          set(`${f}_da_esp`, data[`${f}_da_espiritu`]);
+          set(`${f}_da_rar`, data[`${f}_da_rareza`]);
+          set(`${f}_da_a`, data[`${f}_da_a`]);
+          set(`${f}_rec_de`, data[`${f}_recibe_de`]);
+          set(`${f}_rec_esp`, data[`${f}_recibe_espiritu`]);
+          set(`${f}_rec_rar`, data[`${f}_recibe_rareza`]);
+        });
         document.getElementById('intercambio-status').textContent = 'Cargado';
-      }, 300);
+      }, 400);
     }
 
     async function saveIntercambio() {
-      const payload = { envio_nombre: 'the_CARRE', retorno_nombre: 'the_CARRE', activo: true };
-      for (let i = 0; i < 4; i++) {
-        payload[`envio_espiritu_${i}`] = document.getElementById(`e_esp_${i}`).value;
-        payload[`envio_rareza_${i}`] = document.getElementById(`e_rar_${i}`).value;
-        payload[`envio_destino_${i}`] = document.getElementById(`e_dst_${i}`).value;
-        payload[`retorno_origen_${i}`] = document.getElementById(`r_org_${i}`).value;
-        payload[`retorno_espiritu_${i}`] = document.getElementById(`r_esp_${i}`).value;
-        payload[`retorno_rareza_${i}`] = document.getElementById(`r_rar_${i}`).value;
-      }
+      const get = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+      const payload = { activo: true, f1_participante: 'the_CARRE' };
+      FILAS.forEach(f => {
+        if (f !== 'f1') payload[`${f}_participante`] = get(`${f}_part`);
+        payload[`${f}_da_espiritu`] = get(`${f}_da_esp`);
+        payload[`${f}_da_rareza`] = get(`${f}_da_rar`);
+        payload[`${f}_da_a`] = get(`${f}_da_a`);
+        payload[`${f}_recibe_de`] = get(`${f}_rec_de`);
+        payload[`${f}_recibe_espiritu`] = get(`${f}_rec_esp`);
+        payload[`${f}_recibe_rareza`] = get(`${f}_rec_rar`);
+      });
       let error;
       if (intercambioId) {
         ({ error } = await sb.from('intercambios').update(payload).eq('id', intercambioId));
@@ -964,23 +1074,13 @@
     }
 
     function clearIntercambio() {
-      for (let i = 0; i < 4; i++) {
-        document.getElementById(`e_esp_${i}`).selectedIndex = 0;
-        document.getElementById(`e_rar_${i}`).selectedIndex = 0;
-        document.getElementById(`e_dst_${i}`).selectedIndex = 0;
-        document.getElementById(`r_org_${i}`).selectedIndex = 0;
-        document.getElementById(`r_esp_${i}`).selectedIndex = 0;
-        document.getElementById(`r_rar_${i}`).selectedIndex = 0;
-      }
+      FILAS.forEach(f => {
+        ['da_esp', 'da_rar', 'da_a', 'rec_de', 'rec_esp', 'rec_rar'].forEach(s => {
+          const el = document.getElementById(`${f}_${s}`); if (el) el.selectedIndex = 0;
+        });
+        if (f !== 'f1') { const el = document.getElementById(`${f}_part`); if (el) el.selectedIndex = 0; }
+      });
       document.getElementById('intercambio-status').textContent = '';
-    }
-
-    async function delEsp(id, usuario) {
-      if (!confirm('¿Eliminar a ' + (usuario || 'este seguidor') + '?')) return;
-      if (!String(id).startsWith('new_')) await sb.from('espiritus').delete().eq('id', id);
-      espiritus = espiritus.filter(e => e.id !== id);
-      renderEspTable();
-      showToast('Eliminado');
     }
 
     // ── DRAG & DROP ──
