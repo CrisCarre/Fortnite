@@ -1116,17 +1116,17 @@
 
     function renderIntercambioTablas() {
       function makeParticipant(f, i, section) {
-        if (i === 0) return '<div style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>';
+        if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
         if (i === 1) return '<input class="ic-text-input gold-input" id="' + f + '_' + section + '_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
         return '<input class="ic-text-input" id="' + f + '_' + section + '_part" placeholder="Seguidor...">';
       }
       function makeFixedLabel(text) {
-        return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;border-bottom:1px solid rgba(255,215,0,.2)">' + text + '</div>';
+        return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">' + text + '</div>';
       }
       function makeAQuien(f, i, section) {
         if (section === 'dev') {
           if (i === 0) return makeFixedLabel('the_CARRE');
-          if (i === 1) return '<div class="ic-ayudante-ref" id="' + f + '_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;border-bottom:1px solid rgba(255,215,0,.15);min-height:38px">—</div>';
+          if (i === 1) return '<div class="ic-ayudante-ref" id="' + f + '_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;min-height:38px">—</div>';
         }
         return '<input class="ic-text-input" id="' + f + '_' + section + '_a" placeholder="A quién...">';
       }
