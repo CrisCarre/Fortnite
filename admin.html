@@ -566,6 +566,42 @@
     .gold-input {
       color: var(--gold) !important
     }
+
+    #intercambio-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 30%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255, 140, 0, .12) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    #intercambio-card::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      right: 10%;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(200, 30, 0, .1) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    #intercambio-card .esp-table th {
+      padding: 5px 6px;
+    }
+
+    #intercambio-card .cell-input {
+      padding: 7px 6px !important;
+    }
+
+    #intercambio-card .ic-num {
+      padding: 7px 3px;
+    }
   </style>
 </head>
 
@@ -701,14 +737,15 @@
 
           <!-- INTERCAMBIO -->
           <div class="card" id="intercambio-card"
-            style="background:linear-gradient(135deg,#1a0800 0%,#2a1000 30%,#1a0500 60%,#0f0800 100%);border-color:rgba(255,106,0,.4);box-shadow:0 0 30px rgba(255,80,0,.15),inset 0 0 60px rgba(255,40,0,.05)">
+            style="background:radial-gradient(ellipse at 60% 30%, #2a0a00 0%, #1a0500 35%, #0d0300 65%, #080200 100%);border-color:rgba(255,80,0,.5);box-shadow:0 0 40px rgba(255,60,0,.2), 0 0 80px rgba(180,20,0,.1), inset 0 0 80px rgba(120,10,0,.15);position:relative;overflow:hidden">
 
             <div class="ic-title" style="justify-content:center;text-align:center"><img src="logo.png"
                 style="width:48px;height:48px;border-radius:50%;border:2px solid var(--orange);margin-right:12px">Intercambio
               activo</div>
 
             <!-- DA -->
-            <div class="ic-section-label ic-send-label">PRÉSTAMO</div>
+            <div class="ic-section-label ic-send-label"
+              style="display:block;text-align:center;width:100%;margin-bottom:.5rem">PRÉSTAMO</div>
             <table class="esp-table" style="margin-bottom:1.5rem">
               <thead>
                 <tr>
@@ -723,7 +760,8 @@
             </table>
 
             <!-- DEVUELVE -->
-            <div class="ic-section-label ic-recv-label">DEVUELVE</div>
+            <div class="ic-section-label ic-recv-label"
+              style="display:block;text-align:center;width:100%;margin-bottom:.5rem">DEVUELVE</div>
             <table class="esp-table">
               <thead>
                 <tr>
@@ -961,10 +999,12 @@
     }
     function clearSelection() {
       selectedIds.clear();
-      document.querySelectorAll('#esp-tbody input[type=checkbox]').forEach(c => c.checked = false);
-      document.getElementById('check-all').checked = false;
       updateBulkBar();
-      document.querySelectorAll('#esp-tbody tr').forEach(r => r.classList.remove('selected'));
+      document.querySelectorAll('#esp-tbody tr').forEach(r => {
+        r.classList.remove('selected');
+        const btn = r.querySelector('.del-btn');
+        if (btn) btn.classList.remove('selected-x');
+      });
     }
     async function bulkDelete() {
       if (!selectedIds.size) return;
