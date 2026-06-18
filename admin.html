@@ -1024,12 +1024,7 @@
         const targetId = value === 'pos1' ? 'f1_da_a' : 'f2_da_a';
         const aQuienInput = document.getElementById(targetId);
         if (aQuienInput) aQuienInput.value = seguidor;
-        // También autocompletar espíritu y rareza del seguidor en esa fila
-        const rowFila = value === 'pos1' ? 'f1' : 'f2';
-        const espInput = document.getElementById(rowFila + '_da_esp');
-        const rarInput = document.getElementById(rowFila + '_da_rar');
-        if (espInput && esp.espiritu) espInput.value = esp.espiritu;
-        if (rarInput && esp.rareza) rarInput.value = esp.rareza;
+        // Solo rellena A quién, el espíritu lo pone tú manualmente
       }
     }
     function addEspRow() {
@@ -1137,8 +1132,8 @@
         return '<tr>' +
           '<td class="ic-num">' + (i + 1) + '</td>' +
           '<td>' + makeParticipant(f, i, section) + '</td>' +
-          '<td><input class="cell-input" id="' + f + '_' + section + '_esp" placeholder="Espíritu..."></td>' +
-          '<td><input class="cell-input" id="' + f + '_' + section + '_rar" placeholder="Rareza..."></td>' +
+          '<td><input class="cell-input" id="' + f + '_' + section + '_esp" placeholder="Espíritu..." oninput="colorInput(this)"></td>' +
+          '<td><input class="cell-input" id="' + f + '_' + section + '_rar" placeholder="Rareza..." oninput="colorInput(this)"></td>' +
           '<td>' + makeAQuien(f, i, section) + '</td>' +
           '</tr>';
       }
@@ -1148,9 +1143,30 @@
     function syncAyudante(val) {
       const dev = document.getElementById('f2_dev_part');
       if (dev) dev.value = val;
-      // Actualizar label "A quién" fila 2 de devuelve
       const aRef = document.getElementById('f2_dev_a');
       if (aRef) aRef.textContent = val || '—';
+    }
+
+    // Colorear inputs de rareza según valor
+    const RAREZA_COLORS = {
+      'normal': 'var(--muted)',
+      'oro': 'var(--gold)',
+      'gominola': '#ff80ab',
+      'galaxy': '#d0a0ff'
+    };
+    const ESPIRITU_COLORS = {
+      'zero': '#a0c8ff', 'fantasma': '#d0d0ff', 'demonio': '#ff6060',
+      'dormilón': '#b0a0ff', 'dormilon': '#b0a0ff', 'punk': '#ff80ab',
+      'agua': '#60d0ff', 'fuego': 'var(--orange)', 'tierra': '#c47b3a',
+      'pato': '#ffe080', 'cacahuete': '#d4a460'
+    };
+
+    function colorInput(el) {
+      const val = el.value.trim().toLowerCase();
+      const isRar = el.id && el.id.endsWith('_rar');
+      const isEsp = el.id && el.id.endsWith('_esp');
+      if (isRar) el.style.color = RAREZA_COLORS[val] || 'var(--text)';
+      if (isEsp) el.style.color = ESPIRITU_COLORS[val] || 'var(--text)';
     }
 
 
