@@ -732,7 +732,7 @@
         </div>
       </div>
     </div>
-    <div style="height:40vh"></div>
+    <div style="height:60vh"></div>
   </div>
   <div id="toast"></div>
 
@@ -1008,6 +1008,14 @@
           const sel = row.querySelectorAll('.cell-select')[1];
           if (sel) sel.className = 'cell-select rareza-' + value.toLowerCase();
         }
+      }
+      // Si se pone pos.1 o pos.2, autocompletar "A quién" de the_CARRE en préstamo
+      if (field === 'estado' && (value === 'pos1' || value === 'pos2')) {
+        const seguidor = esp.usuario;
+        const aQuienInput = document.getElementById('f1_da_a');
+        if (aQuienInput) aQuienInput.value = seguidor;
+        // También autocompletar espíritu y rareza del seguidor en la fila de the_CARRE
+        autoFill('the_CARRE', 'f1_da_esp', 'f1_da_rar');
       }
     }
     function addEspRow() {
