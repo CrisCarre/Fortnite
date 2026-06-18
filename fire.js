@@ -16,43 +16,47 @@
     constructor() { this.reset(true); }
     reset(init) {
       this.x = Math.random() * canvas.width;
-      this.y = init ? Math.random() * canvas.height : canvas.height + 10;
-      this.size = Math.random() * 7 + 2;
-      this.speedY = Math.random() * 3.5 + 1.5;
-      this.speedX = (Math.random() - 0.5) * 1.5;
-      this.life = Math.random() * 0.75 + 0.25;
-      this.decay = Math.random() * 0.006 + 0.002;
-      this.wobble = Math.random() * 0.08 - 0.04;
-      const hue = Math.random() * 30 + 5;
-      const light = Math.random() * 25 + 45;
+      this.y = init ? canvas.height - Math.random() * canvas.height * 0.5 : canvas.height + 15;
+      this.size = Math.random() * 12 + 4;
+      this.speedY = Math.random() * 4 + 2;
+      this.speedX = (Math.random() - 0.5) * 2;
+      this.life = Math.random() * 0.8 + 0.2;
+      this.decay = Math.random() * 0.005 + 0.0015;
+      this.wobble = (Math.random() - 0.5) * 0.06;
+      const hue = Math.random() * 35 + 3;
+      const light = Math.random() * 30 + 40;
       this.color = `hsl(${hue},100%,${light}%)`;
+      this.glowColor = `hsl(${hue},100%,65%)`;
     }
     update() {
-      this.x += this.speedX + Math.sin(this.y * 0.02) * this.wobble;
+      this.x += this.speedX + Math.sin(this.y * 0.015) * this.wobble * 10;
       this.y -= this.speedY;
       this.life -= this.decay;
-      this.size *= 0.994;
-      if (this.life <= 0 || this.y < -30) this.reset(false);
+      this.size *= 0.993;
+      if (this.life <= 0 || this.y < -40) this.reset(false);
     }
     draw() {
       ctx.save();
-      ctx.globalAlpha = this.life * 0.85;
-      // Glow
-      ctx.shadowBlur = this.size * 3;
-      ctx.shadowColor = this.color;
+      ctx.globalAlpha = this.life * 0.9;
+      ctx.shadowBlur = this.size * 4;
+      ctx.shadowColor = this.glowColor;
       ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      // segundo círculo más pequeño y brillante encima
+      ctx.globalAlpha = this.life * 0.5;
+      ctx.shadowBlur = this.size * 6;
+      ctx.fillStyle = `hsl(40,100%,80%)`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 0.4, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
   }
 
-  // Más partículas, concentradas en la parte baja
-  for (let i = 0; i < 280; i++) {
-    const p = new Particle();
-    p.y = canvas.height - Math.random() * canvas.height * 0.6;
-    particles.push(p);
+  for (let i = 0; i < 400; i++) {
+    particles.push(new Particle());
   }
 
   function animate() {

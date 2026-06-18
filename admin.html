@@ -671,8 +671,11 @@
         const { error } = await sb.from('espiritus').update(payload).eq('id', id);
         if (error) { showToast('Error al guardar', true); return; }
       }
+      // Marcar como guardado sin recargar toda la tabla
+      const btn = document.getElementById('savebtn-' + id);
+      if (btn) { btn.classList.remove('dirty'); btn.classList.add('saved'); btn.textContent = '✓'; setTimeout(() => { btn.textContent = 'Guardar'; btn.classList.remove('saved'); }, 1500); }
       showToast('Guardado');
-      loadEspiritus();
+      // Actualizar solo el id en el array si era nuevo
     }
 
     async function delEsp(id, usuario) {
