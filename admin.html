@@ -248,9 +248,9 @@
     }
 
     .del-td {
-      width: 32px;
+      width: 44px;
       text-align: center;
-      padding: 4px 2px !important
+      padding: 4px 6px !important
     }
 
     .save-td {
@@ -261,17 +261,25 @@
 
     .del-btn {
       background: transparent;
-      border: none;
-      color: var(--muted);
-      font-size: 15px;
+      border: 1px solid rgba(224, 85, 85, .3);
+      color: #e05555;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: color .15s
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: all .15s;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      min-height: 28px
     }
 
     .del-btn:hover {
-      color: #e05555
+      background: rgba(224, 85, 85, .15);
+      border-color: #e05555
     }
 
     .save-row-btn {
@@ -281,12 +289,13 @@
       font-family: var(--bebas);
       font-size: 13px;
       letter-spacing: 1px;
-      padding: 5px 10px;
+      padding: 6px 10px;
       border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
       opacity: 0;
-      transition: opacity .2s
+      transition: opacity .2s;
+      width: 100%
     }
 
     tr:hover .save-row-btn,
