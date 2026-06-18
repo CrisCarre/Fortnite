@@ -325,6 +325,26 @@
       color: var(--muted)
     }
 
+    /* Rareza en selects */
+    select.rareza-galaxy {
+      color: #d0a0ff;
+      border-color: rgba(180, 100, 255, .4)
+    }
+
+    select.rareza-gominola {
+      color: #ff80ab;
+      border-color: rgba(255, 100, 160, .4)
+    }
+
+    select.rareza-oro {
+      color: var(--gold);
+      border-color: rgba(255, 215, 0, .4)
+    }
+
+    select.rareza-normal {
+      color: var(--muted)
+    }
+
     option {
       background: #1a0e00;
       color: var(--text)
@@ -351,6 +371,74 @@
     .add-row-btn:hover {
       border-color: #c87fff;
       background: rgba(180, 100, 255, .08)
+    }
+
+    /* INTERCAMBIO */
+    .intercambio-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .intercambio-side {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .intercambio-label {
+      font-family: var(--bebas);
+      font-size: 13px;
+      letter-spacing: 3px;
+      margin-bottom: .75rem;
+    }
+
+    .send-label {
+      color: var(--orange);
+    }
+
+    .return-label {
+      color: #c87fff;
+    }
+
+    .intercambio-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .intercambio-field {}
+
+    .intercambio-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid rgba(255, 106, 0, .3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: var(--barlow);
+      font-size: 15px;
+      outline: none;
+    }
+
+    .intercambio-input.locked {
+      opacity: .5;
+      cursor: not-allowed;
+      border-color: var(--border);
+    }
+
+    .intercambio-arrow {
+      text-align: center;
+      font-size: 28px;
+      color: var(--muted);
+      padding: .25rem 0;
+    }
+
+    @media(max-width:600px) {
+      .intercambio-row {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
@@ -475,6 +563,75 @@
             </div>
             <button class="add-row-btn" onclick="addEspRow()">+ Añadir seguidor</button>
           </div>
+
+          <!-- INTERCAMBIO -->
+          <div class="card" style="margin-top:1.25rem">
+            <div class="card-title" style="color:#c87fff;border-bottom-color:rgba(180,100,255,.2)">🔄 Intercambio activo
+            </div>
+
+            <div class="intercambio-wrap">
+
+              <!-- ENVÍO -->
+              <div class="intercambio-side">
+                <div class="intercambio-label send-label">THE_CARRE envía</div>
+                <div class="intercambio-row">
+                  <div class="intercambio-field">
+                    <div class="flabel">De (siempre the_CARRE)</div>
+                    <input type="text" class="intercambio-input locked" value="the_CARRE" readonly>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Espíritu que da</div>
+                    <select class="fselect" id="envio_espiritu"></select>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Rareza</div>
+                    <select class="fselect" id="envio_rareza"></select>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Para quién</div>
+                    <select class="fselect" id="envio_destino">
+                      <option value="">— Seleccionar —</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="intercambio-arrow">⇅</div>
+
+              <!-- RETORNO -->
+              <div class="intercambio-side">
+                <div class="intercambio-label return-label">THE_CARRE recibe</div>
+                <div class="intercambio-row">
+                  <div class="intercambio-field">
+                    <div class="flabel">De quién viene</div>
+                    <select class="fselect" id="retorno_origen">
+                      <option value="">— Seleccionar —</option>
+                    </select>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Espíritu que recibe</div>
+                    <select class="fselect" id="retorno_espiritu"></select>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Rareza</div>
+                    <select class="fselect" id="retorno_rareza"></select>
+                  </div>
+                  <div class="intercambio-field">
+                    <div class="flabel">Para (siempre the_CARRE)</div>
+                    <input type="text" class="intercambio-input locked" value="the_CARRE" readonly>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:1rem;align-items:center">
+              <button class="btn btn-fire" onclick="saveIntercambio()">💾 Guardar intercambio</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearIntercambio()">Limpiar</button>
+              <div style="flex:1;font-size:12px;color:var(--muted)" id="intercambio-status"></div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -501,7 +658,7 @@
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-screen').style.display = 'block';
         document.getElementById('user-pill').style.display = 'block';
-        loadTorneo(); loadEspiritus();
+        loadTorneo(); loadEspiritus(); loadIntercambio();
       } else {
         document.getElementById('login-screen').style.display = '';
         document.getElementById('admin-screen').style.display = 'none';
@@ -601,6 +758,7 @@
       const { data } = await sb.from('espiritus').select('*').order('orden', { ascending: true }).order('created_at', { ascending: true });
       espiritus = data || [];
       renderEspTable();
+      poblarDestinoOrigen();
     }
 
     function espSelect(field, id, opts, current, extraClass = '') {
@@ -644,7 +802,19 @@
 
     function updateEsp(id, field, value) {
       const esp = espiritus.find(e => e.id === id);
-      if (esp) esp[field] = value;
+      if (!esp) return;
+      esp[field] = value;
+
+      // Actualizar color de rareza en tiempo real
+      if (field === 'rareza') {
+        const row = document.querySelector(`tr[data-id="${id}"]`);
+        if (row) {
+          const sel = row.querySelectorAll('.cell-select')[1]; // segundo select = rareza
+          if (sel) {
+            sel.className = 'cell-select rareza-' + value.toLowerCase();
+          }
+        }
+      }
     }
 
     function addEspRow() {
@@ -676,6 +846,75 @@
       if (btn) { btn.classList.remove('dirty'); btn.classList.add('saved'); btn.textContent = '✓'; setTimeout(() => { btn.textContent = 'Guardar'; btn.classList.remove('saved'); }, 1500); }
       showToast('Guardado');
       // Actualizar solo el id en el array si era nuevo
+    }
+
+
+    // ══ INTERCAMBIO ══
+    let intercambioId = null;
+
+    function poblarSelectsIntercambio() {
+      const esp = ESPIRITUS_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
+      const rar = RAREZA_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
+      ['envio_espiritu', 'retorno_espiritu'].forEach(id => document.getElementById(id).innerHTML = esp);
+      ['envio_rareza', 'retorno_rareza'].forEach(id => document.getElementById(id).innerHTML = rar);
+    }
+
+    function poblarDestinoOrigen() {
+      const opts = '<option value="">— Seleccionar —</option>' +
+        espiritus.map(e => `<option value="${e.usuario}">${e.usuario}${e.alias ? ' (' + e.alias + ')' : ''}</option>`).join('');
+      document.getElementById('envio_destino').innerHTML = opts;
+      document.getElementById('retorno_origen').innerHTML = opts;
+    }
+
+    async function loadIntercambio() {
+      poblarSelectsIntercambio();
+      const { data } = await sb.from('intercambios').select('*').eq('activo', true).order('created_at', { ascending: false }).limit(1).single();
+      if (data) {
+        intercambioId = data.id;
+        if (data.envio_espiritu) document.getElementById('envio_espiritu').value = data.envio_espiritu;
+        if (data.envio_rareza) document.getElementById('envio_rareza').value = data.envio_rareza;
+        if (data.retorno_espiritu) document.getElementById('retorno_espiritu').value = data.retorno_espiritu;
+        if (data.retorno_rareza) document.getElementById('retorno_rareza').value = data.retorno_rareza;
+        // destino/origen se poblan después de cargar espíritus
+        setTimeout(() => {
+          if (data.envio_destino) document.getElementById('envio_destino').value = data.envio_destino;
+          if (data.retorno_origen) document.getElementById('retorno_origen').value = data.retorno_origen;
+        }, 500);
+      }
+      document.getElementById('intercambio-status').textContent = data ? 'Cargado' : 'Sin intercambio activo';
+    }
+
+    async function saveIntercambio() {
+      const payload = {
+        envio_nombre: 'the_CARRE',
+        envio_espiritu: document.getElementById('envio_espiritu').value,
+        envio_rareza: document.getElementById('envio_rareza').value,
+        envio_destino: document.getElementById('envio_destino').value,
+        retorno_nombre: 'the_CARRE',
+        retorno_espiritu: document.getElementById('retorno_espiritu').value,
+        retorno_rareza: document.getElementById('retorno_rareza').value,
+        retorno_origen: document.getElementById('retorno_origen').value,
+        activo: true
+      };
+      let error;
+      if (intercambioId) {
+        ({ error } = await sb.from('intercambios').update(payload).eq('id', intercambioId));
+      } else {
+        const res = await sb.from('intercambios').insert([payload]).select().single();
+        error = res.error;
+        if (res.data) intercambioId = res.data.id;
+      }
+      if (error) { showToast('Error al guardar intercambio', true); return; }
+      document.getElementById('intercambio-status').textContent = '✅ Guardado';
+      showToast('Intercambio guardado');
+    }
+
+    function clearIntercambio() {
+      ['envio_espiritu', 'retorno_espiritu'].forEach(id => document.getElementById(id).selectedIndex = 0);
+      ['envio_rareza', 'retorno_rareza'].forEach(id => document.getElementById(id).selectedIndex = 0);
+      document.getElementById('envio_destino').value = '';
+      document.getElementById('retorno_origen').value = '';
+      document.getElementById('intercambio-status').textContent = '';
     }
 
     async function delEsp(id, usuario) {
