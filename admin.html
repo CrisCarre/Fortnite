@@ -756,7 +756,7 @@
         document.getElementById('admin-screen').style.display = 'block';
         document.getElementById('user-pill').style.display = 'block';
         document.getElementById('fab-ic').classList.add('visible');
-        loadTorneo(); loadEspiritus(); loadIntercambio();
+        loadTorneo(); loadEspiritus();
       } else {
         document.getElementById('login-screen').style.display = '';
         document.getElementById('admin-screen').style.display = 'none';
@@ -857,14 +857,37 @@
     }
 
     // ══ SEGUIDORES ══
+    let espiritusCargados = false;
+
     async function loadEspiritus(force = false) {
-      // Si hay filas con el botón dirty visible, no sobreescribir
+      // Si hay filas con el botón dirty visible y no es forzado, no sobreescribir
       const dirty = document.querySelectorAll('.save-row-btn.dirty');
       if (!force && dirty.length > 0) return;
       const { data } = await sb.from('espiritus').select('*').order('orden', { ascending: true }).order('created_at', { ascending: true });
       espiritus = data || [];
       renderEspTable();
-      renderIntercambioTablas();
+      if (!espiritusCargados) {
+        // Primera carga: renderizar tablas intercambio y cargar datos guardados
+        renderIntercambioTablas();
+        setTimeout(loadIntercambio, 300);
+        espiritusCargados = true;
+      } else {
+        // Recargas siguientes: solo actualizar opciones de usuarios sin resetear valores
+        actualizarSelectsUsuarios();
+      }
+    }
+
+    function actualizarSelectsUsuarios() {
+      const opts = getUsrOpts();
+      FILAS.forEach(f => {
+        ['da_part', 'da_a', 'dev_part', 'dev_a'].forEach(s => {
+          const el = document.getElementById(`${f}_${s}`);
+          if (!el) return;
+          const val = el.value;
+          el.innerHTML = opts;
+          if (val) el.value = val;
+        });
+      });
     }
 
     // SELECCIÓN MÚLTIPLE
@@ -1015,13 +1038,13 @@
 
     // Autocomplete espíritu y rareza al seleccionar participante
     function autoFill(participante, espId, rarId) {
+      if (!participante) return;
       const found = espiritus.find(e => e.usuario === participante);
-      if (found) {
-        const espEl = document.getElementById(espId);
-        const rarEl = document.getElementById(rarId);
-        if (espEl && found.espiritu) espEl.value = found.espiritu;
-        if (rarEl && found.rareza) rarEl.value = found.rareza;
-      }
+      if (!found) return;
+      const espEl = document.getElementById(espId);
+      const rarEl = document.getElementById(rarId);
+      if (espEl && found.espiritu) espEl.value = found.espiritu;
+      if (rarEl && found.rareza) rarEl.value = found.rareza;
     }
 
     function renderIntercambioTablas() {
