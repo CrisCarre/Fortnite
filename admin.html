@@ -1059,7 +1059,7 @@
       </td>
       <td><select class="fselect" id="${f}_da_esp">${getEspOpts()}</select></td>
       <td><select class="fselect" id="${f}_da_rar">${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_da_a" onchange="autoFill(this.value,`${ f }_da_esp`,`${ f }_da_rar`)">${getUsrOpts()}</select></td>
+      <td><select class="fselect" id="${f}_da_a" onchange="autoFill(this.value,'"+f+"_da_esp','"+f+"_da_rar')">${getUsrOpts()}</select></td>
     </tr>`).join('');
 
       // DEVUELVE
@@ -1073,7 +1073,7 @@
       </td>
       <td><select class="fselect" id="${f}_dev_esp">${getEspOpts()}</select></td>
       <td><select class="fselect" id="${f}_dev_rar">${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_dev_a" onchange="autoFill(this.value,`${ f }_dev_esp`,`${ f }_dev_rar`)">${getUsrOpts()}</select></td>
+      <td><select class="fselect" id="${f}_dev_a" onchange="autoFill(this.value,'"+f+"_dev_esp','"+f+"_dev_rar')">${getUsrOpts()}</select></td>
     </tr>`).join('');
     }
 
