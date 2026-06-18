@@ -16,9 +16,9 @@
     constructor() { this.reset(true); }
     reset(init) {
       this.x = Math.random() * canvas.width;
-      this.y = init ? canvas.height - Math.random() * canvas.height * 0.5 : canvas.height + 15;
+      this.y = init ? canvas.height - Math.random() * canvas.height * 0.7 : canvas.height + 15;
       this.size = Math.random() * 12 + 4;
-      this.speedY = Math.random() * 4 + 2;
+      this.speedY = Math.random() * 5.5 + 3;
       this.speedX = (Math.random() - 0.5) * 2;
       this.life = Math.random() * 0.8 + 0.2;
       this.decay = Math.random() * 0.005 + 0.0015;
@@ -37,7 +37,7 @@
     }
     draw() {
       ctx.save();
-      ctx.globalAlpha = this.life * 0.9;
+      ctx.globalAlpha = this.life * 0.95;
       ctx.shadowBlur = this.size * 4;
       ctx.shadowColor = this.glowColor;
       ctx.fillStyle = this.color;
@@ -55,7 +55,7 @@
     }
   }
 
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < 450; i++) {
     particles.push(new Particle());
   }
 

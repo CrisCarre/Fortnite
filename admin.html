@@ -505,6 +505,10 @@
       border-color: rgba(255, 215, 0, .15)
     }
 
+    .ic-table tr:hover td {
+      background: rgba(255, 106, 0, .04)
+    }
+
     .ic-num {
       font-family: var(--bebas);
       font-size: 15px;
@@ -1116,13 +1120,23 @@
         if (i === 1) return '<input class="ic-text-input gold-input" id="' + f + '_' + section + '_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
         return '<input class="ic-text-input" id="' + f + '_' + section + '_part" placeholder="Seguidor...">';
       }
+      function makeFixedLabel(text) {
+        return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;border-bottom:1px solid rgba(255,215,0,.2)">' + text + '</div>';
+      }
+      function makeAQuien(f, i, section) {
+        if (section === 'dev') {
+          if (i === 0) return makeFixedLabel('the_CARRE');
+          if (i === 1) return '<div class="ic-ayudante-ref" id="' + f + '_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;border-bottom:1px solid rgba(255,215,0,.15);min-height:38px">—</div>';
+        }
+        return '<input class="ic-text-input" id="' + f + '_' + section + '_a" placeholder="A quién...">';
+      }
       function makeRow(f, i, section, aLabel) {
         return '<tr>' +
           '<td class="ic-num">' + (i + 1) + '</td>' +
           '<td>' + makeParticipant(f, i, section) + '</td>' +
           '<td><input class="ic-text-input" id="' + f + '_' + section + '_esp" placeholder="Espíritu..."></td>' +
           '<td><input class="ic-text-input" id="' + f + '_' + section + '_rar" placeholder="Rareza..."></td>' +
-          '<td><input class="ic-text-input" id="' + f + '_' + section + '_a" placeholder="' + aLabel + '"></td>' +
+          '<td>' + makeAQuien(f, i, section) + '</td>' +
           '</tr>';
       }
       document.getElementById('ic-da-tbody').innerHTML = FILAS.map((f, i) => makeRow(f, i, 'da', 'A quién...')).join('');
@@ -1131,6 +1145,9 @@
     function syncAyudante(val) {
       const dev = document.getElementById('f2_dev_part');
       if (dev) dev.value = val;
+      // Actualizar label "A quién" fila 2 de devuelve
+      const aRef = document.getElementById('f2_dev_a');
+      if (aRef) aRef.textContent = val || '—';
     }
 
 
