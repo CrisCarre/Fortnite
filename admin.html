@@ -787,6 +787,7 @@
       document.getElementById('tab-espiritus').style.display = tab === 'espiritus' ? '' : 'none';
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
+      // NO recargar datos al cambiar pestaña
     }
 
     function scrollToIntercambio() {
@@ -856,7 +857,10 @@
     }
 
     // ══ SEGUIDORES ══
-    async function loadEspiritus() {
+    async function loadEspiritus(force = false) {
+      // Si hay filas con el botón dirty visible, no sobreescribir
+      const dirty = document.querySelectorAll('.save-row-btn.dirty');
+      if (!force && dirty.length > 0) return;
       const { data } = await sb.from('espiritus').select('*').order('orden', { ascending: true }).order('created_at', { ascending: true });
       espiritus = data || [];
       renderEspTable();
@@ -1032,7 +1036,7 @@
       </td>
       <td><select class="fselect" id="${f}_da_esp">${getEspOpts()}</select></td>
       <td><select class="fselect" id="${f}_da_rar">${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_da_a">${getUsrOpts()}</select></td>
+      <td><select class="fselect" id="${f}_da_a" onchange="autoFill(this.value,`${ f }_da_esp`,`${ f }_da_rar`)">${getUsrOpts()}</select></td>
     </tr>`).join('');
 
       // DEVUELVE
@@ -1046,7 +1050,7 @@
       </td>
       <td><select class="fselect" id="${f}_dev_esp">${getEspOpts()}</select></td>
       <td><select class="fselect" id="${f}_dev_rar">${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_dev_a">${getUsrOpts()}</select></td>
+      <td><select class="fselect" id="${f}_dev_a" onchange="autoFill(this.value,`${ f }_dev_esp`,`${ f }_dev_rar`)">${getUsrOpts()}</select></td>
     </tr>`).join('');
     }
 
