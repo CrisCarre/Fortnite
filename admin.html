@@ -600,9 +600,19 @@
       font-size: 10px;
     }
 
+    #intercambio-card .ic-num {
+      font-size: 18px !important;
+    }
+
+    #intercambio-card div[style*="font-family:var(--bebas)"] {
+      font-size: 21px !important;
+    }
+
     #intercambio-card .cell-input {
       padding: 6px 4px !important;
-      font-size: 15px !important;
+      font-size: 21px !important;
+      font-family: var(--bebas) !important;
+      letter-spacing: 1px !important;
     }
 
     #intercambio-card .ic-num {
@@ -661,7 +671,7 @@
 
         <div class="admin-tabs">
           <button class="admin-tab active" onclick="switchTab('torneo',this)">🏆 Torneo</button>
-          <button class="admin-tab esp" onclick="switchTab('espiritus',this)">👻 Seguidores</button>
+          <button class="admin-tab esp" onclick="switchTab('espiritus',this)">👻 Espíritus</button>
         </div>
 
         <!-- TORNEO -->
@@ -717,7 +727,7 @@
         <!-- SEGUIDORES -->
         <div id="tab-espiritus" style="display:none">
           <div class="card">
-            <div class="card-title">Seguidores — edita y guarda fila a fila</div>
+            <div class="card-title">Espíritus — edita y guarda fila a fila</div>
 
             <!-- BARRA SELECCIÓN MÚLTIPLE -->
             <div class="bulk-bar" id="bulk-bar">
