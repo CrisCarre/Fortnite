@@ -1114,17 +1114,26 @@
 
     function renderIntercambioTablas() {
       function makeParticipant(f, i, section) {
-        if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
-        if (i === 1) return '<input class="cell-input gold-input" id="' + f + '_' + section + '_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
-        return '<input class="cell-input" id="' + f + '_' + section + '_part" placeholder="Seguidor...">';
+        if (section === 'da') {
+          // PRÉSTAMO: fila 1 = the_CARRE fijo, fila 2 = AYUDANTE input dorado
+          if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
+          if (i === 1) return '<input class="cell-input gold-input" id="' + f + '_da_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
+          return '<input class="cell-input" id="' + f + '_da_part" placeholder="Seguidor...">';
+        } else {
+          // DEVUELVE: todos son inputs (el seguidor que devuelve)
+          if (i === 0) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
+          if (i === 1) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
+          return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
+        }
       }
       function makeFixedLabel(text) {
         return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">' + text + '</div>';
       }
       function makeAQuien(f, i, section) {
         if (section === 'dev') {
-          if (i === 0) return makeFixedLabel('the_CARRE');
-          if (i === 1) return '<div class="ic-ayudante-ref" id="' + f + '_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;min-height:38px">—</div>';
+          // A quién en DEVUELVE: fila 1 = the_CARRE fijo, fila 2 = ayudante (actualizado por syncAyudante)
+          if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
+          if (i === 1) return '<div id="f2_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;min-height:38px">—</div>';
         }
         return '<input class="cell-input" id="' + f + '_' + section + '_a" placeholder="A quién...">';
       }
