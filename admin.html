@@ -1118,7 +1118,7 @@
           // PRÉSTAMO: fila 1 = the_CARRE fijo, fila 2 = AYUDANTE input dorado
           if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
           if (i === 1) return '<input class="cell-input gold-input" id="' + f + '_da_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
-          return '<input class="cell-input" id="' + f + '_da_part" placeholder="Seguidor...">';
+          return '<input class="cell-input" id="' + f + '_da_part" placeholder="Seguidor..." oninput="syncSeguidor(this.id, this.value)">';
         } else {
           // DEVUELVE: todos son inputs (el seguidor que devuelve)
           if (i === 0) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
@@ -1135,7 +1135,7 @@
           if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
           if (i === 1) return '<div id="f2_dev_a" style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px;min-height:38px">—</div>';
         }
-        return '<input class="cell-input" id="' + f + '_' + section + '_a" placeholder="A quién...">';
+        return '<input class="cell-input" id="' + f + '_' + section + '_a" placeholder="A quién..."' + (section === 'da' ? ' oninput="syncAQuien(\'' + f + '\', this.value)"' : '') + '>';
       }
       function makeRow(f, i, section, aLabel) {
         return '<tr>' +
@@ -1150,10 +1150,32 @@
       document.getElementById('ic-dev-tbody').innerHTML = FILAS.map((f, i) => makeRow(f, i, 'dev', 'A quién...')).join('');
     }
     function syncAyudante(val) {
-      const dev = document.getElementById('f2_dev_part');
-      if (dev) dev.value = val;
+      // Solo actualiza A QUIÉN de DEVUELVE fila 2
       const aRef = document.getElementById('f2_dev_a');
       if (aRef) aRef.textContent = val || '—';
+    }
+
+    function syncSeguidor(inputId, val) {
+      const fila = inputId.split('_')[0];
+      const aRef = document.getElementById(fila + '_dev_a');
+      if (aRef) aRef.value = val;
+    }
+
+    function syncAQuien(fila, val) {
+      // A QUIÉN de PRÉSTAMO → SEGUIDOR de DEVUELVE misma fila
+      const devPart = document.getElementById(fila + '_dev_part');
+      if (devPart) devPart.value = val;
+      // Autocompletar espíritu y rareza del seguidor en PRÉSTAMO y DEVUELVE
+      const found = espiritus.find(e => e.usuario === val);
+      if (!found) return;
+      const daEsp = document.getElementById(fila + '_da_esp');
+      const daRar = document.getElementById(fila + '_da_rar');
+      const devEsp = document.getElementById(fila + '_dev_esp');
+      const devRar = document.getElementById(fila + '_dev_rar');
+      if (daEsp) { daEsp.value = found.espiritu || ''; colorInput(daEsp); }
+      if (daRar) { daRar.value = found.rareza || ''; colorInput(daRar); }
+      if (devEsp) { devEsp.value = found.espiritu || ''; colorInput(devEsp); }
+      if (devRar) { devRar.value = found.rareza || ''; colorInput(devRar); }
     }
 
     // Colorear inputs de rareza según valor
