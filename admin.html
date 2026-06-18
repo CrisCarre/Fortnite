@@ -745,7 +745,7 @@
 
     const ESPIRITUS_OPTS = ['Zero', 'Fantasma', 'Demonio', 'Dormilón', 'Punk', 'Agua', 'Fuego', 'Tierra', 'Pato', 'Cacahuete'];
     const RAREZA_OPTS = ['Normal', 'Oro', 'Gominola', 'Galaxy'];
-    const ESTADO_OPTS = { esperando: '⏳ Esperando', completado: '✅ Completado', ausente: '😶 Ausente', estafador: '❌ Estafador' };
+    const ESTADO_OPTS = { esperando: '⏳ Esperando', completado: '✅ Completado', ausente: '😶 Ausente', estafador: '❌ Estafador', pos1: '🥇 Pos.1', pos2: '🥈 Pos.2' };
     const FILAS = ['f1', 'f2', 'f3', 'f4'];
 
     let jugadores = [], espiritus = [], semanaActual = 1, filtro = 'all', dragSrc = null;
@@ -1071,11 +1071,28 @@
     function autoFill(participante, espId, rarId) {
       if (!participante) return;
       const found = espiritus.find(e => e.usuario === participante);
-      if (!found) return;
-      const espEl = document.getElementById(espId);
-      const rarEl = document.getElementById(rarId);
-      if (espEl && found.espiritu) espEl.value = found.espiritu;
-      if (rarEl && found.rareza) rarEl.value = found.rareza;
+      // Actualizar labels visuales
+      const espVal = document.getElementById(espId + '_val');
+      const rarVal = document.getElementById(rarId + '_val');
+      const espHid = document.getElementById(espId);
+      const rarHid = document.getElementById(rarId);
+      if (found) {
+        if (espVal) espVal.textContent = found.espiritu || '—';
+        if (rarVal) { rarVal.textContent = found.rareza || '—'; rarVal.className = 'ic-val rareza-' + (found.rareza || 'normal').toLowerCase(); }
+        if (espHid) espHid.value = found.espiritu || '';
+        if (rarHid) rarHid.value = found.rareza || '';
+      } else {
+        if (espVal) espVal.textContent = '—';
+        if (rarVal) { rarVal.textContent = '—'; rarVal.className = 'ic-val'; }
+        if (espHid) espHid.value = '';
+        if (rarHid) rarHid.value = '';
+      }
+    }
+
+    // Actualizar label "a quién" al cambiar select
+    function updateAQuien(selectEl, valId) {
+      const val = document.getElementById(valId);
+      if (val) val.textContent = selectEl.value || '—';
     }
 
     function renderIntercambioTablas() {
