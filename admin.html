@@ -1017,6 +1017,12 @@
         const targetId = value === 'pos1' ? 'f1_da_a' : 'f2_da_a';
         const aQuienInput = document.getElementById(targetId);
         if (aQuienInput) aQuienInput.value = seguidor;
+        // También autocompletar espíritu y rareza del seguidor en esa fila
+        const rowFila = value === 'pos1' ? 'f1' : 'f2';
+        const espInput = document.getElementById(rowFila + '_da_esp');
+        const rarInput = document.getElementById(rowFila + '_da_rar');
+        if (espInput && esp.espiritu) espInput.value = esp.espiritu;
+        if (rarInput && esp.rareza) rarInput.value = esp.rareza;
       }
     }
     function addEspRow() {
@@ -1105,37 +1111,23 @@
     }
 
     function renderIntercambioTablas() {
-      const daTbody = document.getElementById('ic-da-tbody');
-      daTbody.innerHTML = FILAS.map((f, i) => `
-    <tr>
-      <td class="ic-num">${i + 1}</td>
-      <td>${i === 0
-          ? `<div class="ic-locked" style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>`
-          : i === 1
-            ? `<input class="ic-text-input gold-input" id="${f}_da_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">`
-            : `<input class="ic-text-input" id="${f}_da_part" placeholder="Seguidor...">`}
-      </td>
-      <td><input class="ic-text-input" id="${f}_da_esp" placeholder="Espíritu..."></td>
-      <td><input class="ic-text-input" id="${f}_da_rar" placeholder="Rareza..."></td>
-      <td><input class="ic-text-input" id="${f}_da_a" placeholder="A quién..."></td>
-    </tr>`).join('');
-
-      const devTbody = document.getElementById('ic-dev-tbody');
-      devTbody.innerHTML = FILAS.map((f, i) => `
-    <tr>
-      <td class="ic-num">${i + 1}</td>
-      <td>${i === 0
-          ? `<div class="ic-locked" style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>`
-          : i === 1
-            ? `<input class="ic-text-input gold-input" id="${f}_dev_part" placeholder="AYUDANTE">`
-            : `<input class="ic-text-input" id="${f}_dev_part" placeholder="Seguidor...">`}
-      </td>
-      <td><input class="ic-text-input" id="${f}_dev_esp" placeholder="Espíritu..."></td>
-      <td><input class="ic-text-input" id="${f}_dev_rar" placeholder="Rareza..."></td>
-      <td><input class="ic-text-input" id="${f}_dev_a" placeholder="A quién..."></td>
-    </tr>`).join('');
+      function makeParticipant(f, i, section) {
+        if (i === 0) return '<div style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>';
+        if (i === 1) return '<input class="ic-text-input gold-input" id="' + f + '_' + section + '_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
+        return '<input class="ic-text-input" id="' + f + '_' + section + '_part" placeholder="Seguidor...">';
+      }
+      function makeRow(f, i, section, aLabel) {
+        return '<tr>' +
+          '<td class="ic-num">' + (i + 1) + '</td>' +
+          '<td>' + makeParticipant(f, i, section) + '</td>' +
+          '<td><input class="ic-text-input" id="' + f + '_' + section + '_esp" placeholder="Espíritu..."></td>' +
+          '<td><input class="ic-text-input" id="' + f + '_' + section + '_rar" placeholder="Rareza..."></td>' +
+          '<td><input class="ic-text-input" id="' + f + '_' + section + '_a" placeholder="' + aLabel + '"></td>' +
+          '</tr>';
+      }
+      document.getElementById('ic-da-tbody').innerHTML = FILAS.map((f, i) => makeRow(f, i, 'da', 'A quién...')).join('');
+      document.getElementById('ic-dev-tbody').innerHTML = FILAS.map((f, i) => makeRow(f, i, 'dev', 'A quién...')).join('');
     }
-
     function syncAyudante(val) {
       const dev = document.getElementById('f2_dev_part');
       if (dev) dev.value = val;
