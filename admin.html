@@ -745,7 +745,7 @@
 
     const ESPIRITUS_OPTS = ['Zero', 'Fantasma', 'Demonio', 'Dormilón', 'Punk', 'Agua', 'Fuego', 'Tierra', 'Pato', 'Cacahuete'];
     const RAREZA_OPTS = ['Normal', 'Oro', 'Gominola', 'Galaxy'];
-    const ESTADO_OPTS = { esperando: '⏳ Esperando', completado: '✅ Completado', ausente: '😶 Ausente', estafador: '❌ Estafador', pos1: '1️⃣ Pos.1', pos2: '2️⃣ Pos.2' };
+    const ESTADO_OPTS = { esperando: '⏳ Esperando', pos1: '1️⃣ Pos.1', pos2: '2️⃣ Pos.2', ausente: '😶 Ausente', completado: '✅ Completado', estafador: '❌ Estafador' };
     const FILAS = ['f1', 'f2', 'f3', 'f4'];
 
     let jugadores = [], espiritus = [], semanaActual = 1, filtro = 'all', dragSrc = null;
@@ -913,21 +913,23 @@
       if (row) row.classList.toggle('selected', checked);
     }
     function toggleOrDel(id, usuario, event) {
-      // Si hay seleccionados O si ya está seleccionado este: toggle selección
-      if (selectedIds.size > 0 || selectedIds.has(id)) {
-        const isSelected = selectedIds.has(id);
-        if (isSelected) selectedIds.delete(id); else selectedIds.add(id);
-        updateBulkBar();
-        const row = document.querySelector(`tr[data-id="${id}"]`);
-        if (row) {
-          row.classList.toggle('selected', !isSelected);
-          const btn = row.querySelector('.del-btn');
-          if (btn) btn.classList.toggle('selected-x', !isSelected);
-        }
+      const isSelected = selectedIds.has(id);
+      if (isSelected) {
+        // Deseleccionar
+        selectedIds.delete(id);
       } else {
-        // Sin selección: borrar directo
-        delEsp(id, usuario);
+        // Seleccionar
+        selectedIds.add(id);
       }
+      updateBulkBar();
+      const row = document.querySelector(`tr[data-id="${id}"]`);
+      if (row) {
+        row.classList.toggle('selected', !isSelected);
+        const btn = row.querySelector('.del-btn');
+        if (btn) btn.classList.toggle('selected-x', !isSelected);
+      }
+      // Si no hay nada seleccionado después de deseleccionar, no borrar
+      // Solo borrar directo si nunca hubo selección (click rápido sin intención de multi)
     }
     function toggleAll(cb) {
       const rows = document.querySelectorAll('#esp-tbody tr[data-id]');
@@ -1009,13 +1011,12 @@
           if (sel) sel.className = 'cell-select rareza-' + value.toLowerCase();
         }
       }
-      // Si se pone pos.1 o pos.2, autocompletar "A quién" de the_CARRE en préstamo
+      // Si se pone pos.1 → fila 1 "A quién", pos.2 → fila 2 "A quién"
       if (field === 'estado' && (value === 'pos1' || value === 'pos2')) {
         const seguidor = esp.usuario;
-        const aQuienInput = document.getElementById('f1_da_a');
+        const targetId = value === 'pos1' ? 'f1_da_a' : 'f2_da_a';
+        const aQuienInput = document.getElementById(targetId);
         if (aQuienInput) aQuienInput.value = seguidor;
-        // También autocompletar espíritu y rareza del seguidor en la fila de the_CARRE
-        autoFill('the_CARRE', 'f1_da_esp', 'f1_da_rar');
       }
     }
     function addEspRow() {
@@ -1104,52 +1105,38 @@
     }
 
     function renderIntercambioTablas() {
-      // DA
       const daTbody = document.getElementById('ic-da-tbody');
       daTbody.innerHTML = FILAS.map((f, i) => `
     <tr>
       <td class="ic-num">${i + 1}</td>
       <td>${i === 0
-          ? `<div class="ic-locked">the_CARRE</div>`
-          : `<select class="fselect" id="${f}_da_part" onchange="autoFill(this.value,'${f}_da_esp','${f}_da_rar')">${getUsrOpts()}</select>`}
+          ? `<div class="ic-locked" style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>`
+          : i === 1
+            ? `<input class="ic-text-input gold-input" id="${f}_da_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">`
+            : `<input class="ic-text-input" id="${f}_da_part" placeholder="Seguidor...">`}
       </td>
-      <td><select class="fselect" id="${f}_da_esp" >${getEspOpts()}</select></td>
-      <td><select class="fselect" id="${f}_da_rar" >${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_da_a" onchange="autoFill(this.value,'"+f+"_da_esp','"+f+"_da_rar')">${getUsrOpts()}</select></td>
+      <td><input class="ic-text-input" id="${f}_da_esp" placeholder="Espíritu..."></td>
+      <td><input class="ic-text-input" id="${f}_da_rar" placeholder="Rareza..."></td>
+      <td><input class="ic-text-input" id="${f}_da_a" placeholder="A quién..."></td>
     </tr>`).join('');
 
-      // DEVUELVE
       const devTbody = document.getElementById('ic-dev-tbody');
       devTbody.innerHTML = FILAS.map((f, i) => `
     <tr>
       <td class="ic-num">${i + 1}</td>
       <td>${i === 0
-          ? `<div class="ic-locked">the_CARRE</div>`
-          : `<select class="fselect" id="${f}_dev_part" onchange="autoFill(this.value,'${f}_dev_esp','${f}_dev_rar')">${getUsrOpts()}</select>`}
+          ? `<div class="ic-locked" style="color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:8px 10px;font-family:var(--bebas);font-size:14px;letter-spacing:1px">the_CARRE</div>`
+          : i === 1
+            ? `<input class="ic-text-input gold-input" id="${f}_dev_part" placeholder="AYUDANTE">`
+            : `<input class="ic-text-input" id="${f}_dev_part" placeholder="Seguidor...">`}
       </td>
-      <td><select class="fselect" id="${f}_dev_esp" >${getEspOpts()}</select></td>
-      <td><select class="fselect" id="${f}_dev_rar" >${getRarOpts()}</select></td>
-      <td><select class="fselect" id="${f}_dev_a" onchange="autoFill(this.value,'"+f+"_dev_esp','"+f+"_dev_rar')">${getUsrOpts()}</select></td>
+      <td><input class="ic-text-input" id="${f}_dev_esp" placeholder="Espíritu..."></td>
+      <td><input class="ic-text-input" id="${f}_dev_rar" placeholder="Rareza..."></td>
+      <td><input class="ic-text-input" id="${f}_dev_a" placeholder="A quién..."></td>
     </tr>`).join('');
     }
 
-    function loadIntercambio() {
-      // Solo visual, no carga de BD
+    function syncAyudante(val) {
+      const dev = document.getElementById('f2_dev_part');
+      if (dev) dev.value = val;
     }
-
-    function saveIntercambio() {
-      // Solo visual, no se guarda en BD
-    }
-
-    function clearIntercambio() {
-      FILAS.forEach(f => {
-        ['da_part', 'da_esp', 'da_rar', 'da_a', 'dev_part', 'dev_esp', 'dev_rar', 'dev_a'].forEach(s => {
-          const el = document.getElementById(`${f}_${s}`); if (el) el.selectedIndex = 0;
-        });
-      });
-      document.getElementById('intercambio-status').textContent = '';
-    }
-  </script>
-</body>
-
-</html>
