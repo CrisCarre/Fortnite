@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE_CARRE · Torneo Semanal</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* FIRE TRANSITION */
+    #fire-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s ease;
+    }
+
+    #fire-overlay canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="fire-canvas"></canvas>
+  <div id="fire-overlay"><canvas id="fire-ov-canvas"></canvas></div>
+  <div id="map-bg"></div>
+
+  <div class="page">
+
+    <div class="hero">
+      <img src="logo.png" alt="THE_CARRE" class="hero-logo">
+      <div class="hero-title"><span>THE</span>_CARRE</div>
+      <div class="hero-sub">Torneo Semanal · Fortnite Creative</div>
+      <div class="week-pill">
+        <span class="flicker"></span>
+        <span id="week-label">Semana 1</span>
+      </div>
+    </div>
+
+
+
+    <div class="container" style="padding-top:1.25rem">
+
+      <div class="map-tabs">
+        <button class="map-tab active" onclick="switchMap('volcano', this)" id="tab-volcano">
+          <span class="map-tab-name">🌋 Volcano Parkour</span>
+        </button>
+        <button class="map-tab" onclick="switchMap('rocket', this)" id="tab-rocket">
+          <span class="map-tab-name">⚽ Rocket Soccer</span>
+        </button>
+      </div>
+
+      <div class="map-cards-wrap">
+        <div class="map-card active" id="card-volcano">
+          <img src="volcano.png" alt="Volcano Parkour">
+          <div class="map-card-info">
+            <div class="map-card-title">Volcano Parkour</div>
+            <div class="map-card-code">
+              <span class="code-label">Código</span>
+              <span class="code-val">9278-9299-0302</span>
+              <button class="copy-btn" onclick="copyCode('9278-9299-0302', this)">Copiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="map-card" id="card-rocket">
+          <img src="rocket.png" alt="Rocket Soccer">
+          <div class="map-card-info">
+            <div class="map-card-title">Rocket Soccer</div>
+            <div class="map-card-code">
+              <span class="code-label">Código</span>
+              <span class="code-val">8885-8841-5802</span>
+              <button class="copy-btn" onclick="copyCode('8885-8841-5802', this)">Copiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="podium-wrap"></div>
+      <div class="slabel">🔥 Clasificación</div>
+      <div class="rlist" id="ranking-list">
+        <div class="loader">Cargando ranking...</div>
+      </div>
+
+    </div>
+
+    <footer>
+      <div class="ftag">#thecarre &nbsp;·&nbsp; gaming & más &nbsp;·&nbsp; <a href="admin.html">Admin</a></div>
+    </footer>
+
+  </div>
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="fire.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://tuucrcdvzenrpmoqqnqz.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1dWNyY2R2emVucnBtb3FxbnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDI5NTEsImV4cCI6MjA5NzI3ODk1MX0.tQA6dChjvv4Rf1VtNFLZMbRMhuMtWhOnueb9J2QShI8';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    let activeMap = 'volcano';
+    let allData = {};
+
+    // ── FIRE OVERLAY ──
+    const ovCanvas = document.getElementById('fire-ov-canvas');
+    const ovCtx = ovCanvas.getContext('2d');
+    const overlay = document.getElementById('fire-overlay');
+    let ovParticles = [];
+    let ovRunning = false;
+
+    function resizeOv() {
+      ovCanvas.width = window.innerWidth;
+      ovCanvas.height = window.innerHeight;
+    }
+    resizeOv();
+    window.addEventListener('resize', resizeOv);
+
+    class OvParticle {
+      constructor() { this.reset(true); }
+      reset(init) {
+        this.x = Math.random() * ovCanvas.width;
+        this.y = init ? Math.random() * ovCanvas.height : ovCanvas.height + 20;
+        this.size = Math.random() * 18 + 6;
+        this.speedY = Math.random() * 6 + 4;
+        this.speedX = (Math.random() - 0.5) * 3;
+        this.life = Math.random() * 0.7 + 0.3;
+        this.decay = Math.random() * 0.018 + 0.01;
+        const hue = Math.random() * 30 + 5;
+        this.color = `hsl(${hue},100%,${Math.random() * 25 + 45}%)`;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y -= this.speedY;
+        this.life -= this.decay;
+        if (this.life <= 0 || this.y < -30) this.reset(false);
+      }
+      draw() {
+        ovCtx.save();
+        ovCtx.globalAlpha = this.life * 0.9;
+        ovCtx.fillStyle = this.color;
+        ovCtx.beginPath();
+        ovCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ovCtx.fill();
+        ovCtx.restore();
+      }
+    }
+
+    for (let i = 0; i < 200; i++) ovParticles.push(new OvParticle());
+
+    function animateOverlay() {
+      if (!ovRunning) return;
+      ovCtx.clearRect(0, 0, ovCanvas.width, ovCanvas.height);
+      ovParticles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateOverlay);
+    }
+
+    function fireTransition(cb) {
+      ovRunning = true;
+      overlay.style.opacity = '1';
+      animateOverlay();
+      setTimeout(() => {
+        cb();
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+          setTimeout(() => { ovRunning = false; }, 300);
+        }, 220);
+      }, 320);
+    }
+
+    // ── FONDO BLUR ──
+    const mapBgs = { volcano: 'volcano.png', rocket: 'rocket.png' };
+    function updateBg(mapa) {
+      const el = document.getElementById('map-bg');
+      el.style.backgroundImage = `url('${mapBgs[mapa]}')`;
+    }
+
+    // ── SWITCH MAPA ──
+    function switchMap(mapa, btn) {
+      if (mapa === activeMap) return;
+      fireTransition(() => {
+        document.getElementById('card-' + activeMap).classList.remove('active');
+        document.getElementById('card-' + mapa).classList.add('active');
+        document.querySelectorAll('.map-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        activeMap = mapa;
+        updateBg(mapa);
+        renderFromCache();
+      });
+    }
+
+    // ── COPIAR CÓDIGO ──
+    function copyCode(code, btn) {
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = '¡Copiado!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    // ── RENDER ──
+    function renderFromCache() {
+      const data = allData[activeMap] || [];
+      const max = data.length ? data[0].puntos || 1 : 1;
+      renderPodium(data);
+      renderRanking(data, max);
+    }
+
+    function renderPodium(sorted) {
+      const el = document.getElementById('podium-wrap');
+      if (sorted.length < 2) { el.innerHTML = ''; return; }
+      const top = sorted.slice(0, 3);
+      const order = [top[1], top[0], top[2]].filter(Boolean);
+      const ac = ['g2', 'g1', 'g3'], bc = ['b2', 'b1', 'b3'], rk = [2, 1, 3];
+      el.innerHTML = `
+    <div class="slabel">🏆 Podio</div>
+    <div class="podium">
+      ${order.map((p, i) => `
+        <div class="pslot">
+          <div class="pav ${ac[i]}">${ini(p.nombre)}</div>
+          <div class="pname">${p.nombre}</div>
+          <div class="ppts">${p.puntos} pts</div>
+          <div class="pblock ${bc[i]}">${rk[i]}</div>
+        </div>`).join('')}
+    </div>`;
+    }
+
+    function renderRanking(sorted, max) {
+      const el = document.getElementById('ranking-list');
+      const tc = ['t1', 't2', 't3'];
+      if (!sorted.length) { el.innerHTML = '<div class="empty">Sin jugadores en este mapa todavía</div>'; return; }
+      el.innerHTML = sorted.map((p, i) => `
+    <div class="rrow ${tc[i] || ''}" style="animation-delay:${i * 0.05}s">
+      <div class="rnum">${i + 1}</div>
+      <div class="rav">${ini(p.nombre)}</div>
+      <div class="rname">${p.nombre}</div>
+      <div class="rbar-wrap"><div class="rbar-bg"><div class="rbar-fill" style="width:${Math.round(p.puntos / max * 100)}%"></div></div></div>
+      <div class="rpts">${p.puntos}<small>pts</small></div>
+    </div>`).join('');
+    }
+
+    // ── CARGAR DATOS ──
+    async function loadData() {
+      const { data, error } = await sb
+        .from('torneo').select('*').order('puntos', { ascending: false });
+      if (error) { document.getElementById('ranking-list').innerHTML = '<div class="empty">Error conectando con Supabase</div>'; return; }
+
+      const { data: cfg } = await sb.from('config').select('value').eq('key', 'semana_actual').single();
+      document.getElementById('week-label').textContent = 'Semana ' + (cfg ? cfg.value : '1');
+
+      allData['volcano'] = data.filter(p => p.mapa === 'volcano' || !p.mapa);
+      allData['rocket'] = data.filter(p => p.mapa === 'rocket');
+
+      updateBg(activeMap);
+      renderFromCache();
+    }
+
+    loadData();
+    setInterval(loadData, 30000);
+  </script>
+</body>
+
+</html>

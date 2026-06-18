@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE_CARRE · Seguidores</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .esp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 2rem;
+        }
+
+        .esp-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 11px 14px;
+            transition: border-color .2s, transform .15s;
+            animation: rowIn .4s ease both;
+        }
+
+        .esp-row:hover {
+            border-color: rgba(255, 106, 0, .3);
+            transform: translateX(3px);
+        }
+
+        .esp-pos {
+            font-family: var(--bebas);
+            font-size: 18px;
+            color: var(--muted);
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .esp-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--bebas);
+            font-size: 14px;
+            letter-spacing: 1px;
+            background: var(--surface2);
+            color: var(--orange);
+            border: 1px solid rgba(255, 106, 0, .3);
+        }
+
+        .esp-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .esp-usuario {
+            font-family: var(--bebas);
+            font-size: 17px;
+            letter-spacing: 1px;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .esp-alias {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .5px;
+        }
+
+        .esp-spirit-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .esp-spirit {
+            font-family: var(--bebas);
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        /* RAREZA */
+        .rareza-badge {
+            font-family: var(--bebas);
+            font-size: 11px;
+            letter-spacing: 2px;
+            padding: 2px 9px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        .rareza-galaxy {
+            background: rgba(180, 100, 255, .15);
+            color: #d0a0ff;
+            border: 1px solid rgba(180, 100, 255, .3);
+        }
+
+        .rareza-gominola {
+            background: rgba(255, 100, 160, .15);
+            color: #ff80ab;
+            border: 1px solid rgba(255, 100, 160, .3);
+        }
+
+        .rareza-oro {
+            background: rgba(255, 215, 0, .12);
+            color: var(--gold);
+            border: 1px solid rgba(255, 215, 0, .3);
+        }
+
+        .rareza-normal {
+            background: rgba(255, 255, 255, .05);
+            color: var(--muted);
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        /* ESTADO */
+        .estado-badge {
+            font-family: var(--bebas);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 3px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        .estado-completado {
+            background: rgba(85, 196, 122, .15);
+            color: #55c47a;
+            border: 1px solid rgba(85, 196, 122, .3);
+        }
+
+        .estado-ausente {
+            background: rgba(170, 170, 170, .1);
+            color: #aaa;
+            border: 1px solid rgba(170, 170, 170, .2);
+        }
+
+        .estado-estafador {
+            background: rgba(224, 85, 85, .15);
+            color: #e05555;
+            border: 1px solid rgba(224, 85, 85, .3);
+        }
+
+        .estado-esperando {
+            background: rgba(255, 200, 0, .12);
+            color: var(--gold);
+            border: 1px solid rgba(255, 200, 0, .25);
+        }
+
+        /* SPIRIT COLOR por tipo */
+        .spirit-zero {
+            color: #a0c8ff;
+        }
+
+        .spirit-fantasma {
+            color: #d0d0ff;
+        }
+
+        .spirit-demonio {
+            color: #ff6060;
+        }
+
+        .spirit-dormilon {
+            color: #b0a0ff;
+        }
+
+        .spirit-punk {
+            color: #ff80ab;
+        }
+
+        .spirit-agua {
+            color: #60d0ff;
+        }
+
+        .spirit-fuego {
+            color: var(--orange);
+        }
+
+        .spirit-tierra {
+            color: #c47b3a;
+        }
+
+        .spirit-pato {
+            color: #ffe080;
+        }
+
+        .spirit-cacahuete {
+            color: #d4a460;
+        }
+
+        .back-link {
+            font-family: var(--bebas);
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 1.25rem;
+            transition: color .15s;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .75rem;
+        }
+
+        .esp-count {
+            font-family: var(--bebas);
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: var(--muted);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+            font-family: var(--bebas);
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="fire-canvas"></canvas>
+
+    <div class="page">
+        <div class="hero" style="padding-bottom:1.25rem">
+            <img src="logo.png" alt="THE_CARRE" class="hero-logo">
+            <div class="hero-title"><span>THE</span>_CARRE</div>
+            <div class="hero-sub">Seguidores &amp; Espíritus</div>
+        </div>
+
+        <div class="container" style="padding-top:1.25rem">
+            <a href="index.html" class="back-link">← Volver al ranking</a>
+
+            <div class="header-row">
+                <div class="slabel" style="margin:0">👻 Seguidores</div>
+                <div class="esp-count" id="esp-count"></div>
+            </div>
+
+            <div class="esp-list" id="esp-list">
+                <div class="loader">Cargando...</div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="ftag">#thecarre · <a href="index.html">Ranking</a> · <a href="admin.html">Admin</a></div>
+        </footer>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="fire.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://tuucrcdvzenrpmoqqnqz.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1dWNyY2R2emVucnBtb3FxbnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDI5NTEsImV4cCI6MjA5NzI3ODk1MX0.tQA6dChjvv4Rf1VtNFLZMbRMhuMtWhOnueb9J2QShI8';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        function spiritClass(s) {
+            const map = { Zero: 'zero', Fantasma: 'fantasma', Demonio: 'demonio', Dormilón: 'dormilon', Punk: 'punk', Agua: 'agua', Fuego: 'fuego', Tierra: 'tierra', Pato: 'pato', Cacahuete: 'cacahuete' };
+            return 'spirit-' + (map[s] || 'zero');
+        }
+
+        function estadoLabel(e) {
+            return { completado: '✅ Completado', ausente: '😶 Ausente', estafador: '❌ Estafador', esperando: '⏳ Esperando' }[e] || e;
+        }
+
+        async function load() {
+            const { data, error } = await sb.from('espiritus').select('*').order('orden', { ascending: true }).order('created_at', { ascending: true });
+            if (error) { document.getElementById('esp-list').innerHTML = '<div class="empty">Error cargando</div>'; return; }
+
+            const lista = data || [];
+            document.getElementById('esp-count').textContent = lista.length + ' seguidores';
+
+            const el = document.getElementById('esp-list');
+            if (!lista.length) { el.innerHTML = '<div class="empty">Sin seguidores todavía</div>'; return; }
+
+            el.innerHTML = lista.map((e, i) => `
+    <div class="esp-row" style="animation-delay:${i * 0.04}s">
+      <div class="esp-pos">${i + 1}</div>
+      <div class="esp-avatar">${ini(e.usuario || '?')}</div>
+      <div class="esp-info">
+        <div class="esp-usuario">${e.usuario || '—'}</div>
+        ${e.alias ? `<div class="esp-alias">${e.alias}</div>` : ''}
+      </div>
+      <div class="esp-spirit-wrap">
+        <div class="esp-spirit ${spiritClass(e.espiritu)}">${e.espiritu || '—'}</div>
+        <div class="rareza-badge rareza-${(e.rareza || 'Normal').toLowerCase()}">${e.rareza || 'Normal'}</div>
+      </div>
+      <div class="estado-badge estado-${e.estado || 'esperando'}">${estadoLabel(e.estado || 'esperando')}</div>
+    </div>`).join('');
+        }
+
+        load();
+    </script>
+</body>
+
+</html>
