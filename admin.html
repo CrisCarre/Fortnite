@@ -410,6 +410,17 @@
 
     .intercambio-field {}
 
+    .intercambio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .intercambio-col-header {
+      padding: 0 2px;
+    }
+
     .intercambio-input {
       width: 100%;
       background: var(--bg);
@@ -565,7 +576,8 @@
           </div>
 
           <!-- INTERCAMBIO -->
-          <div class="card" style="margin-top:1.25rem">
+          <div class="card"
+            style="margin-top:1.25rem;background:linear-gradient(135deg,#1a0800 0%,#2a1000 30%,#1a0500 60%,#0f0800 100%);border-color:rgba(255,106,0,.4);box-shadow:0 0 30px rgba(255,80,0,.15),inset 0 0 60px rgba(255,40,0,.05);">
             <div class="card-title" style="color:#c87fff;border-bottom-color:rgba(180,100,255,.2)">🔄 Intercambio activo
             </div>
 
@@ -574,25 +586,41 @@
               <!-- ENVÍO -->
               <div class="intercambio-side">
                 <div class="intercambio-label send-label">THE_CARRE envía</div>
-                <div class="intercambio-row">
-                  <div class="intercambio-field">
-                    <div class="flabel">De (siempre the_CARRE)</div>
-                    <input type="text" class="intercambio-input locked" value="the_CARRE" readonly>
+                <div class="intercambio-grid">
+                  <div class="intercambio-col-header">
+                    <div class="flabel">Espíritu</div>
                   </div>
-                  <div class="intercambio-field">
-                    <div class="flabel">Espíritu que da</div>
-                    <select class="fselect" id="envio_espiritu"></select>
-                  </div>
-                  <div class="intercambio-field">
+                  <div class="intercambio-col-header">
                     <div class="flabel">Rareza</div>
-                    <select class="fselect" id="envio_rareza"></select>
                   </div>
-                  <div class="intercambio-field">
+                  <div class="intercambio-col-header">
                     <div class="flabel">Para quién</div>
-                    <select class="fselect" id="envio_destino">
-                      <option value="">— Seleccionar —</option>
-                    </select>
                   </div>
+                </div>
+                <div class="intercambio-grid" id="envio-rows">
+                  <select class="fselect" id="e_esp_0"></select>
+                  <select class="fselect" id="e_rar_0"></select>
+                  <select class="fselect" id="e_dst_0">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+
+                  <select class="fselect" id="e_esp_1"></select>
+                  <select class="fselect" id="e_rar_1"></select>
+                  <select class="fselect" id="e_dst_1">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+
+                  <select class="fselect" id="e_esp_2"></select>
+                  <select class="fselect" id="e_rar_2"></select>
+                  <select class="fselect" id="e_dst_2">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+
+                  <select class="fselect" id="e_esp_3"></select>
+                  <select class="fselect" id="e_rar_3"></select>
+                  <select class="fselect" id="e_dst_3">
+                    <option value="">— Seleccionar —</option>
+                  </select>
                 </div>
               </div>
 
@@ -601,25 +629,41 @@
               <!-- RETORNO -->
               <div class="intercambio-side">
                 <div class="intercambio-label return-label">THE_CARRE recibe</div>
-                <div class="intercambio-row">
-                  <div class="intercambio-field">
-                    <div class="flabel">De quién viene</div>
-                    <select class="fselect" id="retorno_origen">
-                      <option value="">— Seleccionar —</option>
-                    </select>
+                <div class="intercambio-grid">
+                  <div class="intercambio-col-header">
+                    <div class="flabel">De quién</div>
                   </div>
-                  <div class="intercambio-field">
-                    <div class="flabel">Espíritu que recibe</div>
-                    <select class="fselect" id="retorno_espiritu"></select>
+                  <div class="intercambio-col-header">
+                    <div class="flabel">Espíritu</div>
                   </div>
-                  <div class="intercambio-field">
+                  <div class="intercambio-col-header">
                     <div class="flabel">Rareza</div>
-                    <select class="fselect" id="retorno_rareza"></select>
                   </div>
-                  <div class="intercambio-field">
-                    <div class="flabel">Para (siempre the_CARRE)</div>
-                    <input type="text" class="intercambio-input locked" value="the_CARRE" readonly>
-                  </div>
+                </div>
+                <div class="intercambio-grid" id="retorno-rows">
+                  <select class="fselect" id="r_org_0">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+                  <select class="fselect" id="r_esp_0"></select>
+                  <select class="fselect" id="r_rar_0"></select>
+
+                  <select class="fselect" id="r_org_1">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+                  <select class="fselect" id="r_esp_1"></select>
+                  <select class="fselect" id="r_rar_1"></select>
+
+                  <select class="fselect" id="r_org_2">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+                  <select class="fselect" id="r_esp_2"></select>
+                  <select class="fselect" id="r_rar_2"></select>
+
+                  <select class="fselect" id="r_org_3">
+                    <option value="">— Seleccionar —</option>
+                  </select>
+                  <select class="fselect" id="r_esp_3"></select>
+                  <select class="fselect" id="r_rar_3"></select>
                 </div>
               </div>
 
@@ -855,47 +899,57 @@
     function poblarSelectsIntercambio() {
       const esp = ESPIRITUS_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
       const rar = RAREZA_OPTS.map(o => `<option value="${o}">${o}</option>`).join('');
-      ['envio_espiritu', 'retorno_espiritu'].forEach(id => document.getElementById(id).innerHTML = esp);
-      ['envio_rareza', 'retorno_rareza'].forEach(id => document.getElementById(id).innerHTML = rar);
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`e_esp_${i}`).innerHTML = esp;
+        document.getElementById(`e_rar_${i}`).innerHTML = rar;
+        document.getElementById(`r_esp_${i}`).innerHTML = esp;
+        document.getElementById(`r_rar_${i}`).innerHTML = rar;
+      }
     }
 
     function poblarDestinoOrigen() {
       const opts = '<option value="">— Seleccionar —</option>' +
         espiritus.map(e => `<option value="${e.usuario}">${e.usuario}${e.alias ? ' (' + e.alias + ')' : ''}</option>`).join('');
-      document.getElementById('envio_destino').innerHTML = opts;
-      document.getElementById('retorno_origen').innerHTML = opts;
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`e_dst_${i}`).innerHTML = opts;
+        document.getElementById(`r_org_${i}`).innerHTML = opts;
+      }
     }
 
     async function loadIntercambio() {
       poblarSelectsIntercambio();
       const { data } = await sb.from('intercambios').select('*').eq('activo', true).order('created_at', { ascending: false }).limit(1).single();
-      if (data) {
-        intercambioId = data.id;
-        if (data.envio_espiritu) document.getElementById('envio_espiritu').value = data.envio_espiritu;
-        if (data.envio_rareza) document.getElementById('envio_rareza').value = data.envio_rareza;
-        if (data.retorno_espiritu) document.getElementById('retorno_espiritu').value = data.retorno_espiritu;
-        if (data.retorno_rareza) document.getElementById('retorno_rareza').value = data.retorno_rareza;
-        // destino/origen se poblan después de cargar espíritus
-        setTimeout(() => {
-          if (data.envio_destino) document.getElementById('envio_destino').value = data.envio_destino;
-          if (data.retorno_origen) document.getElementById('retorno_origen').value = data.retorno_origen;
-        }, 500);
-      }
-      document.getElementById('intercambio-status').textContent = data ? 'Cargado' : 'Sin intercambio activo';
+      if (!data) { document.getElementById('intercambio-status').textContent = 'Sin intercambio activo'; return; }
+      intercambioId = data.id;
+      setTimeout(() => {
+        for (let i = 0; i < 4; i++) {
+          const ei = data[`envio_espiritu_${i}`];
+          const er = data[`envio_rareza_${i}`];
+          const ed = data[`envio_destino_${i}`];
+          const ro = data[`retorno_origen_${i}`];
+          const re = data[`retorno_espiritu_${i}`];
+          const rr = data[`retorno_rareza_${i}`];
+          if (ei) document.getElementById(`e_esp_${i}`).value = ei;
+          if (er) document.getElementById(`e_rar_${i}`).value = er;
+          if (ed) document.getElementById(`e_dst_${i}`).value = ed;
+          if (ro) document.getElementById(`r_org_${i}`).value = ro;
+          if (re) document.getElementById(`r_esp_${i}`).value = re;
+          if (rr) document.getElementById(`r_rar_${i}`).value = rr;
+        }
+        document.getElementById('intercambio-status').textContent = 'Cargado';
+      }, 300);
     }
 
     async function saveIntercambio() {
-      const payload = {
-        envio_nombre: 'the_CARRE',
-        envio_espiritu: document.getElementById('envio_espiritu').value,
-        envio_rareza: document.getElementById('envio_rareza').value,
-        envio_destino: document.getElementById('envio_destino').value,
-        retorno_nombre: 'the_CARRE',
-        retorno_espiritu: document.getElementById('retorno_espiritu').value,
-        retorno_rareza: document.getElementById('retorno_rareza').value,
-        retorno_origen: document.getElementById('retorno_origen').value,
-        activo: true
-      };
+      const payload = { envio_nombre: 'the_CARRE', retorno_nombre: 'the_CARRE', activo: true };
+      for (let i = 0; i < 4; i++) {
+        payload[`envio_espiritu_${i}`] = document.getElementById(`e_esp_${i}`).value;
+        payload[`envio_rareza_${i}`] = document.getElementById(`e_rar_${i}`).value;
+        payload[`envio_destino_${i}`] = document.getElementById(`e_dst_${i}`).value;
+        payload[`retorno_origen_${i}`] = document.getElementById(`r_org_${i}`).value;
+        payload[`retorno_espiritu_${i}`] = document.getElementById(`r_esp_${i}`).value;
+        payload[`retorno_rareza_${i}`] = document.getElementById(`r_rar_${i}`).value;
+      }
       let error;
       if (intercambioId) {
         ({ error } = await sb.from('intercambios').update(payload).eq('id', intercambioId));
@@ -904,16 +958,20 @@
         error = res.error;
         if (res.data) intercambioId = res.data.id;
       }
-      if (error) { showToast('Error al guardar intercambio', true); return; }
+      if (error) { showToast('Error: ' + error.message, true); return; }
       document.getElementById('intercambio-status').textContent = '✅ Guardado';
       showToast('Intercambio guardado');
     }
 
     function clearIntercambio() {
-      ['envio_espiritu', 'retorno_espiritu'].forEach(id => document.getElementById(id).selectedIndex = 0);
-      ['envio_rareza', 'retorno_rareza'].forEach(id => document.getElementById(id).selectedIndex = 0);
-      document.getElementById('envio_destino').value = '';
-      document.getElementById('retorno_origen').value = '';
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`e_esp_${i}`).selectedIndex = 0;
+        document.getElementById(`e_rar_${i}`).selectedIndex = 0;
+        document.getElementById(`e_dst_${i}`).selectedIndex = 0;
+        document.getElementById(`r_org_${i}`).selectedIndex = 0;
+        document.getElementById(`r_esp_${i}`).selectedIndex = 0;
+        document.getElementById(`r_rar_${i}`).selectedIndex = 0;
+      }
       document.getElementById('intercambio-status').textContent = '';
     }
 
