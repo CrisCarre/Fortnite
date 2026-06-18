@@ -562,6 +562,10 @@
     .fab-intercambio.visible {
       display: block
     }
+
+    .gold-input {
+      color: var(--gold) !important
+    }
   </style>
 </head>
 
@@ -1117,13 +1121,13 @@
         if (section === 'da') {
           // PRÉSTAMO: fila 1 = the_CARRE fijo, fila 2 = AYUDANTE input dorado
           if (i === 0) return '<div style="color:var(--gold);font-family:var(--bebas);font-size:14px;letter-spacing:1px;padding:9px 10px">the_CARRE</div>';
-          if (i === 1) return '<input class="cell-input gold-input" id="' + f + '_da_part" placeholder="AYUDANTE" oninput="syncAyudante(this.value)">';
+          if (i === 1) return '<input class="cell-input gold-input" id="' + f + '_da_part" placeholder="AYUDANTE" style="color:var(--gold)" oninput="syncAyudante(this.value)">';
           return '<input class="cell-input" id="' + f + '_da_part" placeholder="Seguidor..." oninput="syncSeguidor(this.id, this.value)">';
         } else {
           // DEVUELVE: todos son inputs (el seguidor que devuelve)
-          if (i === 0) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
-          if (i === 1) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
-          return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor...">';
+          if (i === 0) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor..." oninput="syncAQuienDevuelve(this.id, this.value)">';
+          if (i === 1) return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor..." oninput="syncAQuienDevuelve(this.id, this.value)">';
+          return '<input class="cell-input" id="' + f + '_dev_part" placeholder="Seguidor..." oninput="syncAQuienDevuelve(this.id, this.value)">';
         }
       }
       function makeFixedLabel(text) {
@@ -1156,9 +1160,32 @@
     }
 
     function syncSeguidor(inputId, val) {
+      // PRÉSTAMO Seguidor → DEVUELVE A quién + autocompletar espíritu/rareza
       const fila = inputId.split('_')[0];
       const aRef = document.getElementById(fila + '_dev_a');
       if (aRef) aRef.value = val;
+      // Autocompletar espíritu y rareza del seguidor en ambas tablas
+      // (el seguidor de PRÉSTAMO es quien DA, así que sus datos van en da_esp/da_rar)
+      // NO autocompletar aquí — el seguidor de filas 3/4 en PRÉSTAMO es quien recibe
+      // Solo sincronizar el nombre
+    }
+
+    function syncAQuienDevuelve(inputId, val) {
+      // DEVUELVE Seguidor → PRÉSTAMO A quién + autocompletar
+      const fila = inputId.split('_')[0];
+      const daA = document.getElementById(fila + '_da_a');
+      if (daA) daA.value = val;
+      // Autocompletar espíritu y rareza
+      const found = espiritus.find(e => e.usuario === val);
+      if (!found) return;
+      const daEsp = document.getElementById(fila + '_da_esp');
+      const daRar = document.getElementById(fila + '_da_rar');
+      const devEsp = document.getElementById(fila + '_dev_esp');
+      const devRar = document.getElementById(fila + '_dev_rar');
+      if (daEsp) { daEsp.value = found.espiritu || ''; colorInput(daEsp); }
+      if (daRar) { daRar.value = found.rareza || ''; colorInput(daRar); }
+      if (devEsp) { devEsp.value = found.espiritu || ''; colorInput(devEsp); }
+      if (devRar) { devRar.value = found.rareza || ''; colorInput(devRar); }
     }
 
     function syncAQuien(fila, val) {
